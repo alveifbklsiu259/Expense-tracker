@@ -1,23 +1,17 @@
-import { GlobalContext } from "../context/GlobalState";
-import { useState, useContext} from "react"
+import { useState} from "react"
+import {addTransaction } from './transactionsSlice'
+import { useDispatch} from "react-redux";
 import Swal from 'sweetalert2'
 
 export default function AddTransaction() {
     const [text, setText] = useState('');
     const [amount, setAmount] = useState('');
-    const {dispatch} = useContext(GlobalContext);
+    const dispatch = useDispatch()
     const cansave = [text, amount].every(Boolean)
 
     function handleAddTransaction() {
         if (cansave) {
-            dispatch({
-                type: "ADD_TRANSACTION",
-                payload: {
-                    id: (Math.random() * 100000000).toFixed(0),
-                    text,
-                    amount: Number(amount)
-                }
-            });
+            dispatch(addTransaction({text, amount: Number(amount), id: (Math.random() * 10000).toFixed(0) }));
             setText('');
             setAmount('');
         } else {

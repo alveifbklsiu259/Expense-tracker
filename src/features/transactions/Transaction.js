@@ -1,16 +1,13 @@
-import { useContext } from "react"
-import { GlobalContext } from "../context/GlobalState"
+import { useDispatch } from "react-redux"
+import { deleteTransaction } from "./transactionsSlice";
 
 export default function Transaction({transaction}) {
-    const {dispatch} = useContext(GlobalContext)
-
+    const dispatch = useDispatch();
+    
     const sign = transaction.amount > 0 ? '+' : '-'
 
     function handleDelete(id) {
-        dispatch({
-            type: 'DELETE_TRANSACTION',
-            payload: id
-        })
+        dispatch(deleteTransaction(id))
     }
 
     return (

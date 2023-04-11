@@ -1,8 +1,8 @@
-import { useContext } from "react"
-import { GlobalContext } from "../context/GlobalState"
+import { selectTransactions } from "./transactionsSlice";
+import { useSelector } from 'react-redux'
 
 export default function Balance() {
-    const {transactions} = useContext(GlobalContext);
+    const transactions = useSelector(selectTransactions) ?? []
     const amounts = transactions.map(transaction => transaction.amount);
     const total = amounts.reduce((accumulator, item) => {
         return accumulator + item
