@@ -1,14 +1,20 @@
-import { selectTransactions, selectStatus } from "./transactionsSlice";
-import { useSelector } from 'react-redux'
 import Transaction from './Transaction'
+import { useGetTransactionsQuery } from "../api/apiSlice";
 
 export default function TransactionList() {
-    const transactions = useSelector(selectTransactions) ?? []
+    const {
+        data: transactions,
+        isLoading,
+        isSuccess,
+        isError,
+        error
+    } = useGetTransactionsQuery()
+
+
     let content;
-    const loadingStatus = useSelector(selectStatus);
-    if (loadingStatus === 'loading') {
+    if (isLoading) {
         content = <p>Loading...</p>
-    } else if (loadingStatus === 'idle') {
+    } else if (isSuccess) {
         content = (
             <ul className="list">
                 {transactions.map(transaction => (
@@ -16,6 +22,8 @@ export default function TransactionList() {
                 ))}
             </ul>
         )
+    } else if (isError) {
+        content = <p>{error.toString()}</p>
     }
     return (
         <>

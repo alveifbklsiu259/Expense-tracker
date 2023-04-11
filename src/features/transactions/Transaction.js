@@ -1,13 +1,12 @@
-import { useDispatch } from "react-redux"
-import { deleteTransaction } from "./transactionsSlice";
+import { useDeleteTransactionMutation } from "../api/apiSlice";
 
 export default function Transaction({transaction}) {
-    const dispatch = useDispatch();
-    
+    const [deleteTransaction] = useDeleteTransactionMutation() 
+
     const sign = transaction.amount > 0 ? '+' : '-'
 
-    function handleDelete(id) {
-        dispatch(deleteTransaction(id))
+    async function handleDelete(id) {
+        await deleteTransaction(id)
     }
 
     return (

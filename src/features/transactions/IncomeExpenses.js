@@ -1,8 +1,7 @@
-import { selectTransactions } from "./transactionsSlice";
-import { useSelector } from 'react-redux'
+import { useGetTransactionsQuery } from "../api/apiSlice";
 
 export default function IncomeExpenses() {
-    const transactions = useSelector(selectTransactions) ?? []
+  const {data: transactions = []} = useGetTransactionsQuery()
     const amounts = transactions.map(transaction => transaction.amount);
     const incomes = amounts.filter(amount => amount > 0);
     const expenses = amounts.filter(amount => amount < 0);

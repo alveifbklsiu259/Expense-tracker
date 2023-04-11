@@ -1,8 +1,7 @@
-import { selectTransactions } from "./transactionsSlice";
-import { useSelector } from 'react-redux'
+import { useGetTransactionsQuery } from "../api/apiSlice";
 
 export default function Balance() {
-    const transactions = useSelector(selectTransactions) ?? []
+    const {data: transactions = []} = useGetTransactionsQuery()
     const amounts = transactions.map(transaction => transaction.amount);
     const total = amounts.reduce((accumulator, item) => {
         return accumulator + item
