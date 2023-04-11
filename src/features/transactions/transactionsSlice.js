@@ -1,10 +1,12 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, createEntityAdapter } from "@reduxjs/toolkit";
 
-const initialState = {
-    status: 'idle',
-    transactions: []
-};
+const transactionsAdapter = createEntityAdapter();
 
+const initialState = transactionsAdapter.getInitialState({
+    status: 'idle'
+});
+
+//thunk
 export const getHistory = createAsyncThunk('transactions/getHistory', async () => {
     const response = await fetch('http://localhost:3010/transactions');
     const data = await response.json();
@@ -40,19 +42,19 @@ const transactionsSlice = createSlice({
                 state.status = 'loading'
             })
             .addCase(getHistory.fulfilled, (state, action) => {
-                state.transactions = action.payload
+                transactionsAdapter.setAll(state, action.payload)
                 state.status = 'idle'
             })
-            .addCase(addTransaction.fulfilled, (state, action) => {
-                return {...state, transactions: [...state.transactions, action.payload]}
-            })
-            .addCase(deleteTransaction.fulfilled, (state, action) => {
-                return {...state, transactions: state.transactions.filter(transaction => transaction.id !== action.payload)}
-            })
+            .addCase(addTransaction.fulfilled, transactionsAdapter.addOne)
+            .addCase(deleteTransaction.fulfilled, transactionsAdapter.removeOne)
     }
 });
 
 export default transactionsSlice.reducer;
 
-export const selectTransactions = state => state.transactions.transactions;
+// export const selectTransactions = state => state.transactions.transactions;
 export const selectStatus = state => state.transactions.status
+
+export const {selectAll: selectTransactions} = transactionsAdapter.getSelectors(state => {
+    return state.transactions
+});
