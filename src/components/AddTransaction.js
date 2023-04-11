@@ -1,25 +1,29 @@
 import { GlobalContext } from "../context/GlobalState";
 import { useState, useContext} from "react"
+import Swal from 'sweetalert2'
 
 export default function AddTransaction() {
     const [text, setText] = useState('');
-    const [amount, setAmount] = useState(0);
+    const [amount, setAmount] = useState('');
     const {dispatch} = useContext(GlobalContext);
-    
+    const cansave = [text, amount].every(Boolean)
 
     function handleAddTransaction() {
-        dispatch({
-            type: "ADD_TRANSACTION",
-            payload: {
-                id: Math.random() * 100000000,
-                text,
-                amount: Number(amount)
-            }
-        });
-        setText('');
-        setAmount('');
+        if (cansave) {
+            dispatch({
+                type: "ADD_TRANSACTION",
+                payload: {
+                    id: (Math.random() * 100000000).toFixed(0),
+                    text,
+                    amount: Number(amount)
+                }
+            });
+            setText('');
+            setAmount('');
+        } else {
+            Swal.fire('please enter some text and amount')
+        }
     }
-
     return (
         <>
             <h3>Add new transaction</h3>
