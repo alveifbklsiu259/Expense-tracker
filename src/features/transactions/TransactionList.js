@@ -1,9 +1,10 @@
 import Transaction from './Transaction'
-import { useGetTransactionsQuery } from "../api/apiSlice";
+import { useGetTransactionsQuery, selectTransactions } from "./transactionsSlice";
+import { useSelector } from 'react-redux';
 
 export default function TransactionList() {
+    const transactions = useSelector(selectTransactions)
     const {
-        data: transactions,
         isLoading,
         isSuccess,
         isError,

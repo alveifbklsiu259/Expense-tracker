@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { useAddTransactionMutation } from "../api/apiSlice";
+import { useAddTransactionMutation } from "./transactionsSlice";
 import Swal from 'sweetalert2'
 
 export default function AddTransaction() {

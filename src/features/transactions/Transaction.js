@@ -1,4 +1,4 @@
-import { useDeleteTransactionMutation } from "../api/apiSlice";
+import { useDeleteTransactionMutation } from "./transactionsSlice";
 
 export default function Transaction({transaction}) {
     const [deleteTransaction] = useDeleteTransactionMutation() 
