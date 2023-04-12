@@ -17,6 +17,9 @@ export default function transactionsReducer(state = initialState, action) {
         case "transactions/transactionsLoading" : {
             return {...state, status: 'loading'}
         }
+        case "transactions/transactionsFailed" : {
+            return {...state, status: null}
+        }
         default :
             return state
     };
@@ -50,13 +53,23 @@ export const transactionsLoadedCreator = transactions => {
     };
 };
 
+export const transactionsFailedCreator = () => {
+    return {
+        type: 'transactions/transactionsFailed'
+    };
+};
+
 // thunk function
 
 export async function getHistory(dispatch, getState) {
     dispatch(transactionsLoadingCreator())
-    const response = await fetch('http://localhost:3010/transactions')
-    const data = await response.json();
-    dispatch(transactionsLoadedCreator(data))
+    try {
+        const response = await fetch('http://localhost:3010/transactions')
+        const data = await response.json();
+        dispatch(transactionsLoadedCreator(data))
+    } catch {
+        dispatch(transactionsFailedCreator())
+    }
 };
 
 export function addTransaction(transaction) {
