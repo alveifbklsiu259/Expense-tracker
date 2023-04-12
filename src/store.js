@@ -1,13 +1,12 @@
-import { configureStore } from '@reduxjs/toolkit'
-import { apiSlice } from './features/api/apiSlice';
+import {createStore, applyMiddleware} from 'redux';
+import rootReducer from './reducer';
+import {composeWithDevTools} from 'redux-devtools-extension';
+import thunkMiddleware from 'redux-thunk';
 
-const store = configureStore({
-    reducer: {
-        [apiSlice.reducerPath]: apiSlice.reducer
-    },
-    middleware: getDefaultMiddleware => {
-        return getDefaultMiddleware().concat(apiSlice.middleware)
-    }
-});
+const composedEnhancer = composeWithDevTools(
+    applyMiddleware(thunkMiddleware)
+)
+
+const store = createStore(rootReducer, composedEnhancer)
 
 export default store

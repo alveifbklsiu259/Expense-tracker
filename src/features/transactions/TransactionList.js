@@ -1,21 +1,16 @@
 import Transaction from './Transaction'
-import { useGetTransactionsQuery, selectTransactions } from "./transactionsSlice";
+import {selectTransactions, selectStatus} from "./transactionsSlice";
 import { useSelector } from 'react-redux';
 
 export default function TransactionList() {
-    const transactions = useSelector(selectTransactions)
-    const {
-        isLoading,
-        isSuccess,
-        isError,
-        error
-    } = useGetTransactionsQuery()
-
+    const transactions = useSelector(selectTransactions);
+    const status = useSelector(selectStatus)
+    
 
     let content;
-    if (isLoading) {
+    if (status === 'loading') {
         content = <p>Loading...</p>
-    } else if (isSuccess) {
+    } else if (status === 'idle') {
         content = (
             <ul className="list">
                 {transactions.map(transaction => (
@@ -23,10 +18,9 @@ export default function TransactionList() {
                 ))}
             </ul>
         )
-    } else if (isError) {
+    } else {
         content = <p style={{color: 'red'}}>Please connect to the json server at port 3010</p>
         // npx json-server --watch data/db.json --port 3010
-        console.log(error.error)
     }
     return (
         <>

@@ -1,23 +1,20 @@
 import { useState } from "react"
-import { useAddTransactionMutation } from "./transactionsSlice";
+import { useDispatch} from 'react-redux'
+import { addTransaction } from "./transactionsSlice";
 import Swal from 'sweetalert2'
+
 
 export default function AddTransaction() {
     const [text, setText] = useState('');
     const [amount, setAmount] = useState('');
-    const [addTransaction, {isLoading}] = useAddTransactionMutation();
+    const cansave = [text, amount].every(Boolean)
+    const dispatch = useDispatch()
 
-    const cansave = [text, amount].every(Boolean) && !isLoading
-
-    async function handleAddTransaction() {
+    function handleAddTransaction() {
         if (cansave) {
-            try {
-                await addTransaction({text, amount:Number(amount), id: (Math.random() * 10000).toFixed(0)}).unwrap()
+                dispatch(addTransaction({text, amount:Number(amount), id: (Math.random() * 10000).toFixed(0)}))
                 setText('');
                 setAmount('');
-            } catch (err) {
-                console.log(err)
-            }
         } else {
             Swal.fire('please enter some text and amount')
         }
