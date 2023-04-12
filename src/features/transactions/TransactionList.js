@@ -24,7 +24,9 @@ export default function TransactionList() {
             </ul>
         )
     } else if (isError) {
-        content = <p>{error.toString()}</p>
+        content = <p style={{color: 'red'}}>Please connect to the json server at port 3010</p>
+        // npx json-server --watch data/db.json --port 3010
+        console.log(error.error)
     }
     return (
         <>
